@@ -11,16 +11,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/out"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="center"
-            android:textSize="35sp"
-            android:layout_margin="16dp"
-            android:text="@string/str1" />
 
         <EditText
             android:id="@+id/inp"
@@ -28,23 +18,30 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_marginBottom="20dp"
-            android:inputType="number" />
+            android:inputType="number|numberDecimal" />
 
         <Button
             android:id="@+id/btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:onClick="abc"
-            android:text="@string/str3" />
+            android:onClick="onClick"
+            android:text="@string/str4" />
 
-        <Button
-            android:id="@+id/btm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:onClick="abc"
-            android:text="@string/str3" />
+        <TextView
+        android:id="@+id/out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_margin="16dp"
+        android:text="@string/str2" />
+
+
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

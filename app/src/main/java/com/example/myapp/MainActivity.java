@@ -19,11 +19,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         out = findViewById(R.id.out);
-        out.setText("hello world");
 
         inp = findViewById(R.id.inp);
         String  str =inp.getText().toString();
-        inp.setText("12435");
+        inp.setText("Please input");
 
         Button btn =findViewById(R.id.btn);
         btn.setOnClickListener(this);
@@ -31,11 +30,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        inp.setText("clicked");
+        String  str1 =inp.getText().toString();
+        float r =Integer.parseInt(str1);
+        float a=r*1.8f+32;
+        out.setText("result:"+String.format("%.2f",a));
 
     }
     
     public void abc(View b){
         Log.i(TAG, "abc: 1242");
     }
+
+
 }
