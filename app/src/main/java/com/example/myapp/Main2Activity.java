@@ -21,9 +21,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 
 public  class Main2Activity extends AppCompatActivity implements Runnable {
     private static String TAG ="Main";
@@ -54,8 +51,12 @@ public  class Main2Activity extends AppCompatActivity implements Runnable {
         handler = new Handler(){
             public void handleMessage(Message msg){
                 if(msg.what==5){
-                    String str = (String) msg.obj;
-                    show.setText(str);
+                    Bundle bdl = (Bundle) msg.obj;
+                    dollarRate= bdl.getFloat("dollar_rate");
+                    euroRate= bdl.getFloat("euro_rate");
+                    wonRate= bdl.getFloat("won_rate");
+
+                    Toast.makeText(Main2Activity.this,"汇率已更新",Toast.LENGTH_SHORT).show();
                 }
                 super.handleMessage(msg);
             }
@@ -95,9 +96,9 @@ public  class Main2Activity extends AppCompatActivity implements Runnable {
         config.putExtra("dollar_rate_key",dollarRate);
         config.putExtra("euro_rate_key",euroRate);
         config.putExtra("won_rate_key",wonRate);
-        Log.i(TAG,"openOne: dollarRate=" + dollarRate);
-        Log.i(TAG,"openOne: euroRate=" + euroRate);
-        Log.i(TAG,"openOne: wonRate=" + wonRate);
+//        Log.i(TAG,"openOne: dollarRate=" + dollarRate);
+//        Log.i(TAG,"openOne: euroRate=" + euroRate);
+//        Log.i(TAG,"openOne: wonRate=" + wonRate);
         startActivityForResult(config,1);
 
     }
@@ -127,14 +128,11 @@ public  class Main2Activity extends AppCompatActivity implements Runnable {
     }
     @Override
     public void run() {
-       //获取msg对象，用于返回主线程
-        Message msg = handler.obtainMessage();
-        msg.what=5;
-        msg.obj="hello from run()";
 
-        handler.sendMessage(msg);
-
+        //用于保存获取于网上的汇率
+        Bundle bundle = new Bundle();
         //获取网络数据
+
 
         String url ="http://www.usd-cny.com/bankofchina.htm";
         Document doc = null;
@@ -149,12 +147,29 @@ public  class Main2Activity extends AppCompatActivity implements Runnable {
         Elements tds = table.getElementsByTag("td");
         for(int i =0;i< tds.size();i+=6){
             Element td1 = tds.get(i);
-            Element td2 = tds.get(i+1);
+            Element td2 = tds.get(i+2);
             String str1 = td1.text();
             String val = td2.text();
             Log.i(TAG, "run: "+str1+"==>"+val);
-            float v =100f/Float.parseFloat(val);
+            if(val!="-") {
+                if ("美元".equals(str1)) {
+                    bundle.putFloat("dollar_rate", 100f / Float.parseFloat(val));
+                } else if ("欧元".equals(str1)) {
+                    bundle.putFloat("euro_rate", 100f / Float.parseFloat(val));
+                } else if ("韩元".equals(str1)) {
+                    bundle.putFloat("won_rate", 100f / Float.parseFloat(val));
+                }
+            }
+//            float v =100f/Float.parseFloat(val);
         }
+
+        //获取msg对象，用于返回主线程
+        Message msg = handler.obtainMessage();
+        msg.what=5;
+        msg.obj=bundle;
+
+        handler.sendMessage(msg);
+    }
 //        URL url = null;
 //        try {
 //            url = new URL("http://www.usd-cny.com/icbc.htm");
@@ -168,20 +183,20 @@ public  class Main2Activity extends AppCompatActivity implements Runnable {
 //            e.printStackTrace();
 //        }
 
-    }
 
-    private String inputStream2String(InputStream inputStream) throws IOException{
-        final int bufferSize =1024;
-        final char[] buffer = new char[bufferSize];
-        final StringBuilder out = new StringBuilder();
-        Reader in = new InputStreamReader(inputStream,"gb2312");
-        while (true){
-            int rsz = in.read(buffer,0,buffer.length);
-            if(rsz<0)
-                break;
-            out.append(buffer,0,rsz);
-        }
-        return out.toString();
-    }
+
+//    private String inputStream2String(InputStream inputStream) throws IOException{
+//        final int bufferSize =1024;
+//        final char[] buffer = new char[bufferSize];
+//        final StringBuilder out = new StringBuilder();
+//        Reader in = new InputStreamReader(inputStream,"gb2312");
+//        while (true){
+//            int rsz = in.read(buffer,0,buffer.length);
+//            if(rsz<0)
+//                break;
+//            out.append(buffer,0,rsz);
+//        }
+//        return out.toString();
+//    }
 }
 
