@@ -154,7 +154,6 @@ public  class Main2Activity extends AppCompatActivity implements Runnable {
             String val = td2.text();
             Log.i(TAG, "run: "+str1+"==>"+val);
             float v =100f/Float.parseFloat(val);
-
         }
 //        URL url = null;
 //        try {
