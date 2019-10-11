@@ -34,6 +34,8 @@ public class Main3Activity extends AppCompatActivity {
         ((TextView)findViewById(R.id.sc2)).setText(scoreb);
     }
     //
+
+
     public void btnreset1(View v){
         TextView out2=(TextView)findViewById(R.id.sc2);
         out2.setText("0");
