@@ -1,10 +1,11 @@
 package com.example.myapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Main3Activity extends AppCompatActivity {
 
@@ -13,6 +14,26 @@ public class Main3Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
     }
+
+    @Override
+    //保存横竖屏的数据
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        String scorea = ((TextView)findViewById(R.id.sc1)).getText().toString();
+        String scoreb =((TextView)findViewById(R.id.sc2)).getText().toString();
+        outState.putString("teama_score",scorea);
+        outState.putString("teamb_score",scoreb);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        String scorea =savedInstanceState.getString("teama_score");
+        String scoreb =savedInstanceState.getString("teamb_score");
+        ((TextView)findViewById(R.id.sc1)).setText(scorea);
+        ((TextView)findViewById(R.id.sc2)).setText(scoreb);
+    }
+    //
     public void btnreset1(View v){
         TextView out2=(TextView)findViewById(R.id.sc2);
         out2.setText("0");
