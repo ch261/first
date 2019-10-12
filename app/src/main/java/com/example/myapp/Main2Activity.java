@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,12 +22,16 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public  class Main2Activity extends AppCompatActivity implements Runnable {
     private static String TAG ="Main";
     private float dollarRate=(1/7.1f);
     private float euroRate=(1/11f);
     private float wonRate=500;
+    private String updateDate="";
 
     EditText rmb;
     TextView show;
@@ -44,9 +49,21 @@ public  class Main2Activity extends AppCompatActivity implements Runnable {
         dollarRate=sharedPreferences.getFloat("dollar_rate",0.0f);
         euroRate=sharedPreferences.getFloat("euro_rate",0.0f);
         wonRate=sharedPreferences.getFloat("won_rate",0.0f);
+        updateDate=sharedPreferences.getString("update_date","");
+
+
+        //获取当前时间
+        Date today=Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        final String todaystr= sdf.format(today);
+
+        if (!todaystr.equals(updateDate)){
+            Thread t = new Thread(this);
+            t.start();
+        }
+
 
         //开启子线程
-
 
         handler = new Handler(){
             public void handleMessage(Message msg){
@@ -56,14 +73,22 @@ public  class Main2Activity extends AppCompatActivity implements Runnable {
                     euroRate= bdl.getFloat("euro_rate");
                     wonRate= bdl.getFloat("won_rate");
 
+                    //保存更新的日期
+                    SharedPreferences sp = getSharedPreferences("myrate",Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("update_date",todaystr);
+                    editor.putFloat("dollar_rate",dollarRate);
+                    editor.putFloat("euro_rate",euroRate);
+                    editor.putFloat("won_rate",wonRate);
+                    editor.apply();
+
                     Toast.makeText(Main2Activity.this,"汇率已更新",Toast.LENGTH_SHORT).show();
                 }
                 super.handleMessage(msg);
             }
         };
 
-        Thread t = new Thread(this);
-        t.start();
+
     }
 
 
@@ -103,10 +128,21 @@ public  class Main2Activity extends AppCompatActivity implements Runnable {
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId()==R.id.open_list){
+            Intent list = new Intent(this, mylistActivity.class);
+            startActivity(list);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -132,8 +168,19 @@ public  class Main2Activity extends AppCompatActivity implements Runnable {
         //用于保存获取于网上的汇率
         Bundle bundle = new Bundle();
         //获取网络数据
+        getformBOC(bundle);
 
+        //Bundle bundle1;
 
+        //获取msg对象，用于返回主线程
+        Message msg = handler.obtainMessage();
+        msg.what=5;
+        msg.obj=bundle;
+
+        handler.sendMessage(msg);
+    }
+
+    private void getformBOC(Bundle bundle) {
         String url ="http://www.usd-cny.com/bankofchina.htm";
         Document doc = null;
         try {
@@ -162,13 +209,6 @@ public  class Main2Activity extends AppCompatActivity implements Runnable {
             }
 //            float v =100f/Float.parseFloat(val);
         }
-
-        //获取msg对象，用于返回主线程
-        Message msg = handler.obtainMessage();
-        msg.what=5;
-        msg.obj=bundle;
-
-        handler.sendMessage(msg);
     }
 //        URL url = null;
 //        try {
