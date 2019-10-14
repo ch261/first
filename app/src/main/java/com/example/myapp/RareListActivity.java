@@ -76,10 +76,10 @@ public class RareListActivity extends ListActivity implements Runnable{
 
             relist.add(str1+ "==>" + val);
         }
-
         Message msg = handler.obtainMessage(7);
         msg.obj=relist;
         handler.sendMessage(msg);
+
 
 
     }

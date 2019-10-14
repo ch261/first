@@ -139,7 +139,7 @@ public  class Main2Activity extends AppCompatActivity implements Runnable {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId()==R.id.open_list){
-            Intent list = new Intent(this, RareListActivity.class);
+            Intent list = new Intent(this, mylist2Activity.class);
             startActivity(list);
         }
         return super.onOptionsItemSelected(item);

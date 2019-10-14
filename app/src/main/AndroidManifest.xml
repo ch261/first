@@ -12,7 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".mylistActivity"></activity>
+        <activity android:name=".RateCalcActivity"></activity>
+        <activity android:name=".MyAdapterActivity" />
+        <activity android:name=".mylist2Activity" />
+        <activity android:name=".mylistActivity" />
         <activity android:name=".RareListActivity" />
         <activity android:name=".Main2Activity">
             <intent-filter>

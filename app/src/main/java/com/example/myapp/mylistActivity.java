@@ -19,6 +19,5 @@ public class mylistActivity extends AppCompatActivity {
 
         ListAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,data);
         listView.setAdapter(adapter);
-
     }
 }
