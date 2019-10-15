@@ -1,6 +1,8 @@
 package com.example.myapp;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,10 +24,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class mylist2Activity extends ListActivity implements Runnable, AdapterView.OnItemClickListener {
+public class mylist2Activity extends ListActivity implements Runnable, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     Handler handler;
     private String TAG ="list2";
     private ArrayList<HashMap<String,String>> listItems; //存放文字图片
+    private List<HashMap<String, String>> list2;
     private SimpleAdapter listItemAdapter;
 
 
@@ -42,7 +45,7 @@ public class mylist2Activity extends ListActivity implements Runnable, AdapterVi
             @Override
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what==7){
-                    List<HashMap<String, String>> list2 = (List<HashMap<String, String>>) msg.obj;
+                    list2 = (List<HashMap<String, String>>) msg.obj;
                     listItemAdapter = new SimpleAdapter(mylist2Activity.this,list2,
                             R.layout.activity_mylist2,
                             new String[]{"ItemTitle","ItemDetail"},
@@ -55,6 +58,7 @@ public class mylist2Activity extends ListActivity implements Runnable, AdapterVi
         };
 
         getListView().setOnItemClickListener(this);
+        getListView().setOnItemLongClickListener(this);
 
     }
 
@@ -63,7 +67,7 @@ public class mylist2Activity extends ListActivity implements Runnable, AdapterVi
         for (int i= 0;i<20;i++){
             HashMap<String, String> map = new HashMap<String, String>();
             map.put("ItemTitle","Rate:"+i);
-            map.put("ItemDetail","Detail:"+i);
+            map.put("ItemDetail",""+i);
             listItems.add(map);
         }
         //生成适配器的Item和动态数组对应的元素
@@ -105,7 +109,7 @@ public class mylist2Activity extends ListActivity implements Runnable, AdapterVi
 
     }
 
-    @Override
+    @Override //点击按钮函数
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         HashMap<String, String> map= (HashMap<String, String>) getListView().getItemAtPosition(position);
         String titleStr =map.get("ItemTitle");
@@ -123,5 +127,23 @@ public class mylist2Activity extends ListActivity implements Runnable, AdapterVi
         startActivity(rateCalc);
 
 
+    }
+
+    @Override  //长按按钮函数
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
+
+        //构造对话框
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示").setMessage("请确认是否删除数据").setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //删除操作
+                list2.remove(position);
+                listItemAdapter.notifyDataSetChanged();
+            }
+        }).
+                setNegativeButton("否",null);
+        builder.create().show();
+        return true;
     }
 }
