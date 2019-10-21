@@ -141,6 +141,16 @@ public  class Main2Activity extends AppCompatActivity implements Runnable {
         if (item.getItemId()==R.id.open_list){
             Intent list = new Intent(this, mylist2Activity.class);
             startActivity(list);
+            //测试数据库
+//            RateItem item1 = new RateItem("aaa","124");
+//            Ratemanger ratemanger= new Ratemanger(this);
+//            ratemanger.add(item1);
+//            ratemanger.add(new RateItem("bbb","555"));
+//
+//            List<RateItem> testlist = ratemanger.listAll();
+//            for (RateItem i:testlist){
+//
+//            }
         }
         return super.onOptionsItemSelected(item);
     }

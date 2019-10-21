@@ -13,7 +13,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".RateCalcActivity" android:theme="@style/Theme.AppCompat.Dialog"></activity>
-        <activity android:name=".MyAdapterActivity" />
         <activity android:name=".mylist2Activity" />
         <activity android:name=".mylistActivity" />
         <activity android:name=".RareListActivity" />
