@@ -12,14 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Frame"></activity>
+
+        <activity android:name=".Frame" />
         <activity
             android:name=".RateCalcActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity android:name=".mylist2Activity" />
         <activity android:name=".mylistActivity" />
         <activity android:name=".RareListActivity" />
-        <activity android:name=".Main2Activity">
+        <activity android:name=".vote">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
